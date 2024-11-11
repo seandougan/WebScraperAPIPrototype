@@ -1,0 +1,54 @@
+# Build Folders and Files
+bin/
+obj/
+out/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Rider & JetBrains specific files
+.idea/
+*.sln.iml
+
+# ASP.NET Core specific files
+appsettings*.json
+appsettings*.Development.json
+
+# Entity Framework Files
+*.efmigration
+*.efmodel
+
+# Logs
+logs/
+*.log
+
+# OS generated files and folders
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Windows image file caches
+*.diagcab
+*.ppkg
+*.wim
+
+# Node.js / JavaScript
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Individual files and folders (example)
+secret.json

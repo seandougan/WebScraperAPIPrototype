@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebScraperAPIPrototype", "WebScraperAPIPrototype\WebScraperAPIPrototype.csproj", "{6BBC29F6-9436-4A32-854F-B9851B87FCBF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6BBC29F6-9436-4A32-854F-B9851B87FCBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BBC29F6-9436-4A32-854F-B9851B87FCBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BBC29F6-9436-4A32-854F-B9851B87FCBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BBC29F6-9436-4A32-854F-B9851B87FCBF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
