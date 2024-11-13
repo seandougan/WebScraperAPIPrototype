@@ -13,22 +13,24 @@ namespace WebScraperAPIPrototype.Data.Entity
         [Required]
         public string? ProductName { get; set; }
 
-        public long NutritionId { get; set; }  // Foreign Key
+        public long NutritionId { get; set; }
         [ForeignKey(nameof(NutritionId))]
-        public virtual Nutrition? Nutrition { get; set; }  // Navigation Property
+        public virtual Nutrition? Nutrition { get; set; }  // 1:1 with Nutrition
 
-        public int BrandId { get; set; }  // Foreign Key to Brand
-        public int CategoryId { get; set; }  // Foreign Key to Categories
-        public int CountryOfOrigin { get; set; }  // Foreign Key to Countries
-
+        public int BrandId { get; set; }
         [ForeignKey(nameof(BrandId))]
-        public virtual Brand? Brand { get; set; }  // Navigation Property
+        public virtual Brand? Brand { get; set; }  // 1:1 with Brand
+
+        public int CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
-        public virtual Categories? Category { get; set; }  // Navigation Property
+        public virtual Categories? Category { get; set; }  // 1:1 with Categories
+
+        public int CountryOfOrigin { get; set; }
         [ForeignKey(nameof(CountryOfOrigin))]
-        public virtual Countries? Country { get; set; }  // Navigation Property
+        public virtual Countries? Country { get; set; }  // 1:1 with Countries
 
         public string? Description { get; set; }
+
         public DateTime CreatedDate { get; set; }
         public int CreatedByUserId { get; set; }
         public DateTime ModifiedDate { get; set; }
@@ -37,7 +39,8 @@ namespace WebScraperAPIPrototype.Data.Entity
         public DateTime? DeletedDate { get; set; }  // Nullable for consistency
         public string? DeletedReason { get; set; }
 
-        public virtual ICollection<URL>? UrLs { get; set; }  // Navigation Property for URLs
-        public virtual ICollection<IngredientsProduct> IngredientsProducts { get; set; }  // Navigation Property for Join Table
+        public virtual ICollection<URL> URLs { get; set; }  // 1:Many with URLs
+
+        public virtual ICollection<IngredientsProduct> IngredientsProducts { get; set; }  // Many:Many with Ingredients via junction table
     }
 }

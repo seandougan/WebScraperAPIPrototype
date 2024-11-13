@@ -1,100 +1,103 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebScraperAPIPrototype.Data.Entity;
 
-namespace WebScraperAPIPrototype.Data;
-
-public class WebScraperDBContext : DbContext
+namespace WebScraperAPIPrototype.Data
 {
-    public DbSet<Product> Products { get; set; }
-    public DbSet<Nutrition> Nutritions { get; set; }
-    public DbSet<VitaminsMass> VitaminsMasses { get; set; }
-    public DbSet<URL> URLs { get; set; }
-    public DbSet<Brand> Brands { get; set; }
-    public DbSet<Countries> Countries { get; set; }
-    public DbSet<Categories> Categories { get; set; }
-    public DbSet<Ingredients> Ingredients { get; set; }
-    public DbSet<IngredientsProduct> IngredientsProducts { get; set; }
-    
-    public WebScraperDBContext(DbContextOptions<WebScraperDBContext> options) : base(options)
+    public class WebScraperDBContext : DbContext
     {
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Nutrition> Nutritions { get; set; }
+        public DbSet<VitaminsMass> VitaminsMasses { get; set; }
+        public DbSet<URL> URLs { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Countries> Countries { get; set; }
+        public DbSet<Categories> Categories { get; set; }
+        public DbSet<Ingredients> Ingredients { get; set; }
+        public DbSet<IngredientsProduct> IngredientsProducts { get; set; }
         
-    }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        // Configure composite key for Product
-        modelBuilder.Entity<Product>()
-            .HasKey(p => new { p.ProductId, p.ServingSize });
+        public WebScraperDBContext(DbContextOptions<WebScraperDBContext> options) : base(options)
+        {
+        }
 
-        // Configure the relationship between Product and Nutrition
-        modelBuilder.Entity<Product>()
-            .HasOne(p => p.Nutrition)
-            .WithMany(n => n.Products)
-            .HasForeignKey(p => p.NutritionId);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Configure composite key for Product
+            modelBuilder.Entity<Product>()
+                .HasKey(p => new { p.ProductId, p.ProductName, p.ServingSize });
 
-        // Configure the relationship between Product and Brand
-        modelBuilder.Entity<Product>()
-            .HasOne(p => p.Brand)
-            .WithMany(b => b.Products)
-            .HasForeignKey(p => p.BrandId);
+            // Configure the relationship between Product and Nutrition
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Nutrition)
+                .WithOne(n => n.Product)
+                .HasForeignKey<Product>(p => p.NutritionId);
 
-        // Configure the relationship between Product and Categories
-        modelBuilder.Entity<Product>()
-            .HasOne(p => p.Category)
-            .WithMany(c => c.Products)
-            .HasForeignKey(p => p.CategoryId);
+            // Configure the relationship between Product and Brand
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Brand)
+                .WithOne(b => b.Product)
+                .HasForeignKey<Product>(p => p.BrandId);
 
-        // Configure the relationship between Product and Countries
-        modelBuilder.Entity<Product>()
-            .HasOne(p => p.Country)
-            .WithMany(c => c.Products)
-            .HasForeignKey(p => p.CountryOfOrigin);
+            // Configure the relationship between Product and Categories
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithOne(c => c.Product)
+                .HasForeignKey<Product>(p => p.CategoryId);
 
-        // Configure the relationship between Product and URLs
-        modelBuilder.Entity<Product>()
-            .HasMany(p => p.URLs)
-            .WithOne(u => u.Product)
-            .HasForeignKey(u => u.ProductId);
+            // Configure the relationship between Product and Countries
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Country)
+                .WithOne(c => c.Product)
+                .HasForeignKey<Product>(p => p.CountryOfOrigin);
 
-        // Configure the relationship between Nutrition and VitaminsMass
-        modelBuilder.Entity<Nutrition>()
-            .HasOne(n => n.VitaminsMass)
-            .WithMany(v => v.Nutritions)
-            .HasForeignKey(n => n.VitaminsMassId);
+            // Configure composite key for URL
+            modelBuilder.Entity<URL>()
+                .HasKey(u => new { u.UrlId, u.ProductId, u.Url });
 
-        // Configure primary keys
-        modelBuilder.Entity<Nutrition>()
-            .HasKey(n => n.NutritionId);
+            // 1:Many relationship between Product and URLs
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.URLs)
+                .WithOne(u => u.Product)
+                .HasForeignKey(u => u.ProductId);
 
-        modelBuilder.Entity<VitaminsMass>()
-            .HasKey(v => v.VitaminsMassId);
+            // Configure composite key for IngredientsProduct
+            modelBuilder.Entity<IngredientsProduct>()
+                .HasKey(ip => new { ip.IngredientsProductId, ip.ProductId, ip.IngredientId });
 
-        modelBuilder.Entity<URL>()
-            .HasKey(u => u.UrlId);
+            // Configure many-to-many relationship between Product and Ingredients via IngredientsProduct
+            modelBuilder.Entity<IngredientsProduct>()
+                .HasOne(ip => ip.Ingredient)
+                .WithMany(i => i.IngredientsProducts)
+                .HasForeignKey(ip => ip.IngredientId);
 
-        modelBuilder.Entity<Brand>()
-            .HasKey(b => b.BrandId);
+            modelBuilder.Entity<IngredientsProduct>()
+                .HasOne(ip => ip.Product)
+                .WithMany(p => p.IngredientsProducts)
+                .HasForeignKey(ip => ip.ProductId);
 
-        modelBuilder.Entity<Countries>()
-            .HasKey(c => c.CountryId);
+            // Configure one-to-one relationships between Nutrition and VitaminsMass
+            modelBuilder.Entity<Nutrition>()
+                .HasOne(n => n.VitaminsMass)
+                .WithMany(v => v.Nutritions)
+                .HasForeignKey(n => n.VitaminsMassId);
 
-        modelBuilder.Entity<Categories>()
-            .HasKey(c => c.CategoryId);
+            // Primary keys for other entities
+            modelBuilder.Entity<Nutrition>()
+                .HasKey(n => n.NutritionId);
 
-        modelBuilder.Entity<Ingredients>()
-            .HasKey(i => i.IngredientsId);
+            modelBuilder.Entity<VitaminsMass>()
+                .HasKey(v => v.VitaminsMassId);
 
-        // Configure the relationship between Product and Ingredients via IngredientsProduct
-        modelBuilder.Entity<IngredientsProduct>()
-            .HasKey(ip => ip.IngredientsProductId);
+            modelBuilder.Entity<Brand>()
+                .HasKey(b => b.BrandId);
 
-        modelBuilder.Entity<IngredientsProduct>()
-            .HasOne(ip => ip.Ingredient)
-            .WithMany(i => i.IngredientsProducts)
-            .HasForeignKey(ip => ip.IngredientId);
+            modelBuilder.Entity<Countries>()
+                .HasKey(c => c.CountryId);
 
-        modelBuilder.Entity<IngredientsProduct>()
-            .HasOne(ip => ip.Product)
-            .WithMany(p => p.IngredientsProducts)
-            .HasForeignKey(ip => ip.ProductId);
+            modelBuilder.Entity<Categories>()
+                .HasKey(c => c.CategoryId);
+
+            modelBuilder.Entity<Ingredients>()
+                .HasKey(i => i.IngredientsId);
+        }
     }
 }

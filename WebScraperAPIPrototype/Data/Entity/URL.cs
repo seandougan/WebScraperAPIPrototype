@@ -6,14 +6,15 @@ namespace WebScraperAPIPrototype.Data.Entity
 {
     public class URL
     {
-        [Key]
         public long UrlId { get; set; }
         public long ProductId { get; set; }
+        
+        [Required]
+        public string? Url { get; set; }
 
         [ForeignKey(nameof(ProductId))]
-        public virtual Product Product { get; set; }  // Navigation Property
+        public virtual Product Product { get; set; }  // Many:1 with Product
 
-        public string? Url { get; set; }
         public DateTime CreatedDate { get; set; }
         public int CreatedByUserId { get; set; }
         public DateTime ModifiedDate { get; set; }

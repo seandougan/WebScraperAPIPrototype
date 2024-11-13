@@ -17,6 +17,6 @@ namespace WebScraperAPIPrototype.Data.Entity
         public DateTime? DeletedDate { get; set; }  // Nullable for consistency
         public string? DeletedReason { get; set; }
 
-        public virtual ICollection<Product> Products { get; set; }  // Navigation Property
+        public virtual Product Product { get; set; }  // Navigation Property to Product
     }
 }

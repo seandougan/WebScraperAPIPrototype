@@ -33,6 +33,6 @@ namespace WebScraperAPIPrototype.Data.Entity
         [ForeignKey(nameof(VitaminsMassId))]
         public virtual VitaminsMass VitaminsMass { get; set; }  // Navigation Property
 
-        public virtual ICollection<Product> Products { get; set; }  // Navigation Property for reverse mapping
+        public virtual Product Product { get; set; }  // Navigation Property to Product
     }
 }
